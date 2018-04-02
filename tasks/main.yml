@@ -1,2 +1,53 @@
 ---
-# tasks file for ruby-ignore-rbenv
+- name: Install dependencies
+  apt:
+    name: "{{ item }}"
+    state: latest
+    update_cache: yes
+  with_items:
+    - build-essential
+    - libssl-dev
+    - libreadline-dev
+    - zlib1g-dev
+    - libyaml-dev
+    - libffi-dev
+    - libxml2-dev
+
+- name: Clone ruby-build
+  git:
+    repo: https://github.com/rbenv/ruby-build
+    dest: /tmp/ruby-build
+
+- name: Install ruby-build
+  shell: /tmp/ruby-build/install.sh
+
+- name: Install ruby
+  command: /usr/local/bin/ruby-build 2.5.1 /opt/ruby-2.5.1
+
+- name: Set ruby.sh
+  template:
+    src: ruby.sh.j2
+    dest: /etc/profile.d/ruby.sh
+    mode: 0644
+    owner: root
+
+- name: Uninstall rbenv-install
+  file:
+    state: absent
+    path: /usr/local/bin/rbenv-install
+
+- name: Uninstall rbenv-uninstall
+  file:
+    state: absent
+    path: /usr/local/bin/rbenv-uninstall
+
+- name: Uninstall ruby-build
+  file:
+    state: absent
+    path: /usr/local/bin/ruby-build
+
+- name: Remove ruby-build
+  file:
+    state: absent
+    path: /tmp/ruby-build
+
