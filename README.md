@@ -11,7 +11,11 @@ No
 Role Variables
 --------------
 
-WIP
+```yml
+ruby_ignore_rbenv:
+  ruby_version: 2.5.1
+  ruby_build_repo: https://github.com/rbenv/ruby-build.git
+```
 
 Dependencies
 ------------
