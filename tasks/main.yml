@@ -43,6 +43,10 @@
     owner: root
   when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
 
+- name: Execute ruby.sh
+  shell: bash -lc "source /etc/profile.d/ruby.sh"
+  when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
+
 - name: Uninstall rbenv-install
   file:
     state: absent
