@@ -10,5 +10,6 @@ script:
   - ansible-playbook -i tests/inventory tests/test.yml --syntax-check
   # Run the role/playbook with ansible-playbook.
   - ansible-playbook -i tests/inventory tests/test.yml --connection=local
-  - ruby -v
+  - /usr/local/lib/ruby-2.5.1/bin/ruby --version
+  - cat /etc/profile.d/ruby.sh
 
