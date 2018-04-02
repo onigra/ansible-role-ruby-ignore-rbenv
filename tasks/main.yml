@@ -7,6 +7,7 @@
   register: ruby_version
 
 - name: Install dependencies
+  become: yes
   apt:
     name: "{{ item }}"
     state: latest
@@ -28,14 +29,17 @@
   when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
 
 - name: Install ruby-build
+  become: yes
   shell: /tmp/ruby-build/install.sh
   when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
 
 - name: Install ruby
+  become: yes
   command: /usr/local/bin/ruby-build {{ ruby_ignore_rbenv.ruby_version }} {{ ruby_ignore_rbenv.install_path }}/ruby-{{ ruby_ignore_rbenv.ruby_version }}
   when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
 
 - name: Set ruby.sh
+  become: yes
   template:
     src: ruby.sh.j2
     dest: /etc/profile.d/ruby.sh
@@ -44,16 +48,19 @@
   when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
 
 - name: Uninstall rbenv-install
+  become: yes
   file:
     state: absent
     path: /usr/local/bin/rbenv-install
 
 - name: Uninstall rbenv-uninstall
+  become: yes
   file:
     state: absent
     path: /usr/local/bin/rbenv-uninstall
 
 - name: Uninstall ruby-build
+  become: yes
   file:
     state: absent
     path: /usr/local/bin/ruby-build
