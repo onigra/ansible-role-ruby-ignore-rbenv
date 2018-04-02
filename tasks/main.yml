@@ -32,7 +32,7 @@
   when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
 
 - name: Install ruby
-  command: /usr/local/bin/ruby-build {{ ruby_ignore_rbenv.ruby_version }} /opt/ruby-{{ ruby_ignore_rbenv.ruby_version }}
+  command: /usr/local/bin/ruby-build {{ ruby_ignore_rbenv.ruby_version }} {{ ruby_ignore_rbenv.install_path }}/ruby-{{ ruby_ignore_rbenv.ruby_version }}
   when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
 
 - name: Set ruby.sh
