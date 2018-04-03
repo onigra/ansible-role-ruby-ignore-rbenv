@@ -10,6 +10,7 @@ script:
   - ansible-playbook -i tests/inventory tests/test.yml --syntax-check
   # Run the role/playbook with ansible-playbook.
   - ansible-playbook -i tests/inventory tests/test.yml --connection=local
-  - /usr/local/lib/ruby-2.5.1/bin/ruby --version
-  - cat /etc/profile.d/ruby.sh
+  - /usr/local/lib/ruby-2.5.1/bin/ruby --version | awk '{ print $2 }' | test $(head) = 2.5.1p57
+  - cat /etc/profile.d/ruby.sh | [[ "$(head)" =~ "export PATH=/usr/local/lib/ruby-2.5.1/bin:\$PATH" ]]
+  - cat /etc/profile.d/ruby.sh | [[ "$(head)" =~ "export MANPATH=:/usr/local/lib/ruby-2.5.1/share/man" ]]
 
