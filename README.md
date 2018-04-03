@@ -26,7 +26,16 @@ No
 Example Playbook
 ----------------
 
-WIP
+```yml
+---
+- hosts: all
+  become: yes
+  become_method: sudo
+  roles:
+    - { role: onigra.ruby-ignore-rbenv }
+```
+
+and see [example directory](https://github.com/onigra/ansible-role-ruby-ignore-rbenv/tree/master/examples)
 
 License
 -------
