@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/onigra/ansible-role-ruby-ignore-rbenv.svg?branch=master)](https://travis-ci.org/onigra/ansible-role-ruby-ignore-rbenv)
+
 Ansible ruby-ignore-rbenv
 =========
 
