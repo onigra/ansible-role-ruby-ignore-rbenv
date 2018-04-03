@@ -1,2 +1,1 @@
-- src: https://github.com/onigra/ansible-role-ruby-ignore-rbenv
-  name: onigra.ruby-ignore-rbenv
+- src: onigra.ruby-ignore-rbenv
