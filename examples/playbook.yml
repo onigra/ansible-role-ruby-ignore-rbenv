@@ -3,5 +3,5 @@
   become: yes
   become_method: sudo
   roles:
-    - { role: galaxy/onigra.ruby-ignore-rbenv }
+    - { role: ../../ansible-role-ruby-ignore-rbenv }
 
