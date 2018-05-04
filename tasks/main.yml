@@ -39,6 +39,7 @@
   when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
 
 - name: Create ruby symlink
+  become: yes
   file:
     src: /usr/local/lib/ruby-{{ ruby_ignore_rbenv.ruby_version }}
     dest: /usr/local/lib/ruby
