@@ -9,17 +9,16 @@
 - name: Install dependencies
   become: yes
   apt:
-    name: "{{ item }}"
+    name:
+      - build-essential
+      - libssl-dev
+      - libreadline-dev
+      - zlib1g-dev
+      - libyaml-dev
+      - libffi-dev
+      - libxml2-dev
     state: latest
     update_cache: yes
-  with_items:
-    - build-essential
-    - libssl-dev
-    - libreadline-dev
-    - zlib1g-dev
-    - libyaml-dev
-    - libffi-dev
-    - libxml2-dev
   when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
 
 - name: Clone ruby-build
