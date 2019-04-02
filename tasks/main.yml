@@ -37,26 +37,15 @@
   command: /usr/local/bin/ruby-build {{ ruby_ignore_rbenv.ruby_version }} {{ ruby_ignore_rbenv.install_path }}
   when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
 
-- name: Uninstall rbenv-install
-  become: yes
-  file:
-    state: absent
-    path: /usr/local/bin/rbenv-install
-
-- name: Uninstall rbenv-uninstall
-  become: yes
-  file:
-    state: absent
-    path: /usr/local/bin/rbenv-uninstall
-
-- name: Uninstall ruby-build
-  become: yes
-  file:
-    state: absent
-    path: /usr/local/bin/ruby-build
-
 - name: Remove ruby-build
+  become: yes
   file:
     state: absent
-    path: /tmp/ruby-build
+    path: "{{ item }}"
+  loop:
+    - /usr/local/bin/rbenv-install
+    - /usr/local/bin/rbenv-uninstall
+    - /usr/local/bin/ruby-build
+    - /tmp/ruby-build
+  when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
 
