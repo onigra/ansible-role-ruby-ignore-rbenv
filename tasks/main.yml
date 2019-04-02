@@ -4,7 +4,7 @@
   changed_when: false
   failed_when: false
   check_mode: no
-  register: ruby_version
+  register: ruby_version_check
 
 - name: Install dependencies
   become: yes
@@ -19,62 +19,33 @@
       - libxml2-dev
     state: latest
     update_cache: yes
-  when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
+  when: ruby_version_check.rc != 0 or ruby_version_check.stdout.find(ruby_version) == -1
 
 - name: Clone ruby-build
   git:
-    repo: "{{ ruby_ignore_rbenv.ruby_build_repo }}"
+    repo: "{{ ruby_build_repo }}"
     dest: /tmp/ruby-build
-  when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
+  when: ruby_version_check.rc != 0 or ruby_version_check.stdout.find(ruby_version) == -1
 
 - name: Install ruby-build
   become: yes
   shell: /tmp/ruby-build/install.sh
-  when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
+  when: ruby_version_check.rc != 0 or ruby_version_check.stdout.find(ruby_version) == -1
 
 - name: Install ruby
   become: yes
-  command: /usr/local/bin/ruby-build {{ ruby_ignore_rbenv.ruby_version }} {{ ruby_ignore_rbenv.install_path }}/ruby-{{ ruby_ignore_rbenv.ruby_version }}
-  when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
-
-- name: Create ruby symlink
-  become: yes
-  file:
-    src: /usr/local/lib/ruby-{{ ruby_ignore_rbenv.ruby_version }}
-    dest: /usr/local/lib/ruby
-    owner: root
-    group: root
-    state: link
-
-- name: Set ruby.sh
-  become: yes
-  template:
-    src: ruby.sh.j2
-    dest: /etc/profile.d/ruby.sh
-    mode: 0644
-    owner: root
-  when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
-
-- name: Uninstall rbenv-install
-  become: yes
-  file:
-    state: absent
-    path: /usr/local/bin/rbenv-install
-
-- name: Uninstall rbenv-uninstall
-  become: yes
-  file:
-    state: absent
-    path: /usr/local/bin/rbenv-uninstall
-
-- name: Uninstall ruby-build
-  become: yes
-  file:
-    state: absent
-    path: /usr/local/bin/ruby-build
+  command: /usr/local/bin/ruby-build {{ ruby_version }} {{ ruby_install_path }}
+  when: ruby_version_check.rc != 0 or ruby_version_check.stdout.find(ruby_version) == -1
 
 - name: Remove ruby-build
+  become: yes
   file:
     state: absent
-    path: /tmp/ruby-build
+    path: "{{ item }}"
+  loop:
+    - /usr/local/bin/rbenv-install
+    - /usr/local/bin/rbenv-uninstall
+    - /usr/local/bin/ruby-build
+    - /tmp/ruby-build
+  when: ruby_version_check.rc != 0 or ruby_version_check.stdout.find(ruby_version) == -1
 
