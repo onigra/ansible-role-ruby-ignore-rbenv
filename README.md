@@ -14,10 +14,9 @@ Role Variables
 --------------
 
 ```yml
-ruby_ignore_rbenv:
-  ruby_version: 2.6.2
-  ruby_build_repo: https://github.com/rbenv/ruby-build.git
-  install_path: /usr/local
+ruby_version: 2.6.2
+ruby_build_repo: https://github.com/rbenv/ruby-build.git
+ruby_install_path: /usr/local
 ```
 
 Dependencies

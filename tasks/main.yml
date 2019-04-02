@@ -4,7 +4,7 @@
   changed_when: false
   failed_when: false
   check_mode: no
-  register: ruby_version
+  register: ruby_version_check
 
 - name: Install dependencies
   become: yes
@@ -19,23 +19,23 @@
       - libxml2-dev
     state: latest
     update_cache: yes
-  when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
+  when: ruby_version_check.rc != 0 or ruby_version_check.stdout.find(ruby_version) == -1
 
 - name: Clone ruby-build
   git:
-    repo: "{{ ruby_ignore_rbenv.ruby_build_repo }}"
+    repo: "{{ ruby_build_repo }}"
     dest: /tmp/ruby-build
-  when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
+  when: ruby_version_check.rc != 0 or ruby_version_check.stdout.find(ruby_version) == -1
 
 - name: Install ruby-build
   become: yes
   shell: /tmp/ruby-build/install.sh
-  when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
+  when: ruby_version_check.rc != 0 or ruby_version_check.stdout.find(ruby_version) == -1
 
 - name: Install ruby
   become: yes
-  command: /usr/local/bin/ruby-build {{ ruby_ignore_rbenv.ruby_version }} {{ ruby_ignore_rbenv.install_path }}
-  when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
+  command: /usr/local/bin/ruby-build {{ ruby_version }} {{ ruby_install_path }}
+  when: ruby_version_check.rc != 0 or ruby_version_check.stdout.find(ruby_version) == -1
 
 - name: Remove ruby-build
   become: yes
@@ -47,5 +47,5 @@
     - /usr/local/bin/rbenv-uninstall
     - /usr/local/bin/ruby-build
     - /tmp/ruby-build
-  when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
+  when: ruby_version_check.rc != 0 or ruby_version_check.stdout.find(ruby_version) == -1
 
