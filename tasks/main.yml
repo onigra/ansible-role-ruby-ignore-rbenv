@@ -37,15 +37,6 @@
   command: /usr/local/bin/ruby-build {{ ruby_ignore_rbenv.ruby_version }} {{ ruby_ignore_rbenv.install_path }}
   when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
 
-- name: Set ruby.sh
-  become: yes
-  template:
-    src: ruby.sh.j2
-    dest: /etc/profile.d/ruby.sh
-    mode: 0644
-    owner: root
-  when: ruby_version.rc != 0 or ruby_version.stdout.find(ruby_ignore_rbenv.ruby_version) == -1
-
 - name: Uninstall rbenv-install
   become: yes
   file:
